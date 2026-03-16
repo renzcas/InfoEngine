@@ -1,7 +1,7 @@
 from .laplace_organ import LaplaceOrgan
 from organs.cybersecurity.bloodhound_red_organ import BloodHoundRedOrgan
 from organs.cybersecurity.bloodhound_blue_organ import BloodHoundBlueOrgan
-from organs.cybersecurity.cyber_origin_organ import CyberOriginOrgan
+from backend.organs.cybersecurity.cyber_origin_organ_old import CyberOriginOrgan
 from organs.cybersecurity.cors_organ import CORSOrgan
 from organs.cybersecurity.xss_organ import XSSOrgan
 

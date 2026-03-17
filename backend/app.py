@@ -1,9 +1,33 @@
-from flask import Flask
-from backend.flask_routes.power_spectrum import power_spectrum_bp
+import os
+from flask import Flask, jsonify
+from flask_cors import CORS
 
-flask_app = Flask(__name__)
-flask_app.register_blueprint(power_spectrum_bp)
+def create_app():
+    app = Flask(__name__)
+    CORS(app)
 
-@flask_app.route("/")
-def home():
-    return "Flask root is alive — InfoEngine hybrid backend running."
+    @app.route("/")
+    def index():
+        return jsonify({"status": "alive", "organism": "InfoEngine"})
+
+    # InfoPhyzx
+    try:
+        from organs.infophyzx import infophyzx_bp
+        app.register_blueprint(infophyzx_bp, url_prefix="/infophyzx")
+    except Exception:
+        pass
+
+    # CyberArena
+    try:
+        from organs.cyberarena import cyberarena_bp
+        app.register_blueprint(cyberarena_bp, url_prefix="/cyber")
+    except Exception:
+        pass
+
+    return app
+
+app = create_app()
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=True)

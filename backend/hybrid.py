@@ -1,10 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.wsgi import WSGIMiddleware
 
-from backend.app import flask_app
-from backend.api import fastapi_app
+from flask_app import flask_app
+from api import fastapi_app
 
-# Main ASGI app
 app = FastAPI(title="InfoEngine Hybrid Backend")
 
 # Mount Flask at root

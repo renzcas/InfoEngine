@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>InfoEngine Cockpit</title>
+  <link rel="stylesheet" href="../css/panel.css">
+  <script>
+    function loadPanel(path) {
+      const frame = document.getElementById("panel-frame");
+      frame.classList.add("fade-out");
+      setTimeout(() => {
+        frame.src = path;
+        frame.onload = () => frame.classList.remove("fade-out");
+      }, 150);
+    }
+  </script>
+</head>
+<body>
+  <div id="sidebar">
+    <button onclick="loadPanel('infophyzx.html')">InfoPhyzx</button>
+    <button onclick="loadPanel('cyberarena.html')">CyberArena</button>
+    <button onclick="loadPanel('matrix_playground.html')">Matrix</button>
+    <button onclick="loadPanel('ideals_resonance.html')">Ideals & Resonance</button>
+    <button onclick="loadPanel('riemann_resonance.html')">Riemann</button>
+    <button onclick="loadPanel('arena_phyzx_hybrid.html')">Arena + Physics</button>
+  </div>
+
+  <div id="main">
+    <iframe id="panel-frame" src="infophyzx.html"></iframe>
+  </div>
+</body>
+</html>

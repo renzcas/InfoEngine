@@ -4,15 +4,27 @@ window.addEventListener("DOMContentLoaded", () => {
   const out = document.getElementById("matrix-output");
 
   btn.onclick = async () => {
-    const matrix = JSON.parse(input.value);
-    const res = await fetch("http://localhost:5000/matrix/eigen", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ matrix })
-    });
-    const data = await res.json();
-    out.textContent = JSON.stringify(data, null, 2);
+    try {
+      // Parse matrix from textarea
+      const matrix = JSON.parse(input.value);
 
-    window.EventBus.publish("matrix:eigen", data);
+      // Send to backend
+      const res = await fetch("http://localhost:5000/matrix/eigen", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ matrix })
+      });
+
+      const data = await res.json();
+
+      // Display result
+      out.textContent = JSON.stringify(data, null, 2);
+
+      // Broadcast eigenvalues to all other panels
+      window.EventBus.publish("matrix:eigen", data);
+
+    } catch (err) {
+      out.textContent = "Invalid matrix or backend error.";
+    }
   };
 });

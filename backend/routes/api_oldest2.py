@@ -23,39 +23,39 @@ from backend.organs.physics.koopman_organ import KoopmanOrgan
 from backend.organs.physics.zeta_gamma_organ import ZetaGammaOrgan
 from backend.organs.physics.free_energy import FreeEnergyOrgan
 
-@router.post("/organ/physics/power_spectrum")
+@router.post("/physics/power_spectrum")
 def analyze_power_spectrum(payload: SignalPayload):
     organ = PowerSpectrumOrgan(sample_rate=payload.sample_rate)
     return organ.analyze(np.array(payload.signal))
 
 
-@router.post("/organ/physics/koopman")
+@router.post("/physics/koopman")
 def analyze_koopman(payload: SignalPayload):
     organ = KoopmanOrgan()
     return organ.analyze(np.array(payload.signal))
 
 
-@router.post("/organ/physics/zeta_gamma")
+@router.post("/physics/zeta_gamma")
 def analyze_zeta_gamma(payload: SignalPayload):
     organ = ZetaGammaOrgan()
     return organ.analyze(np.array(payload.signal))
 
 
-@router.post("/organ/physics/free_energy")
+@router.post("/physics/free_energy")
 def analyze_free_energy(payload: SignalPayload):
     organ = FreeEnergyOrgan()
     return organ.analyze(np.array(payload.signal))
 
 
-# ---- Laplace Organ ----
+# ---- Laplace Organ (special payload) ----
 
 class LaplacePayload(BaseModel):
     signal: list[float]
     sample_rate: float = 1.0
-    method: str = "prony"
+    method: str = "prony"   # prony, matrix_pencil, burg, continuous_time
     order: int = 10
 
-@router.post("/organ/physics/laplace")
+@router.post("/physics/laplace")
 def analyze_laplace(payload: LaplacePayload):
     organ = LaplaceOrgan(
         sample_rate=payload.sample_rate,
@@ -65,7 +65,7 @@ def analyze_laplace(payload: LaplacePayload):
     return organ.analyze(np.array(payload.signal))
 
 
-# ---- Physics Core ----
+# ---- Physics Core (Hamiltonian evolution) ----
 
 from backend.core.physics_core import PhysicsCore
 
@@ -77,7 +77,7 @@ class PhysicsEvolveRequest(BaseModel):
     H_name: str = "harmonic"
     params: dict | None = None
 
-@router.post("/organ/physics/evolve")
+@router.post("/physics/evolve")
 def physics_evolve(req: PhysicsEvolveRequest):
     return physics_core.evolve(
         x0=req.x0,
@@ -94,13 +94,13 @@ def physics_evolve(req: PhysicsEvolveRequest):
 from backend.organs.computation.hash import HashOrgan
 from backend.organs.computation.causal_set import CausalSetOrgan
 
-@router.post("/organ/computation/hash")
+@router.post("/computation/hash")
 def analyze_hash(payload: SignalPayload):
     organ = HashOrgan()
     return organ.analyze(np.array(payload.signal))
 
 
-@router.post("/organ/computation/causal_set")
+@router.post("/computation/causal_set")
 def analyze_causal_set(payload: SignalPayload):
     organ = CausalSetOrgan()
     return organ.analyze(np.array(payload.signal))
@@ -113,13 +113,13 @@ def analyze_causal_set(payload: SignalPayload):
 from backend.organs.mind.self_reference_organ import SelfReferenceOrgan
 from backend.organs.mind.consciousness_organ import ConsciousnessOrgan
 
-@router.post("/organ/mind/self_reference")
+@router.post("/mind/self_reference")
 def analyze_self_reference(payload: SignalPayload):
     organ = SelfReferenceOrgan()
     return organ.analyze(np.array(payload.signal))
 
 
-@router.post("/organ/mind/consciousness")
+@router.post("/mind/consciousness")
 def analyze_consciousness(payload: SignalPayload):
     organ = ConsciousnessOrgan()
     return organ.analyze(np.array(payload.signal))
@@ -143,13 +143,13 @@ class BloodHoundInput(BaseModel):
     edges: list
     high_value_nodes: list = []
 
-@router.post("/organ/cyber/bloodhound/red")
+@router.post("/cyber/bloodhound/red")
 def cyber_bloodhound_red(payload: BloodHoundInput):
     organ = BloodHoundRedOrgan()
     return organ.process(payload.model_dump())
 
 
-@router.post("/organ/cyber/bloodhound/blue")
+@router.post("/cyber/bloodhound/blue")
 def cyber_bloodhound_blue(payload: BloodHoundInput):
     organ = BloodHoundBlueOrgan()
     return organ.process(payload.model_dump())
@@ -162,7 +162,7 @@ class CyberOriginInput(BaseModel):
     cors_rules: list = []
     xss_sinks: list = []
 
-@router.post("/organ/cyber/origin")
+@router.post("/cyber/origin")
 def cyber_origin(payload: CyberOriginInput):
     organ = CyberOriginOrgan()
     return organ.process(payload.model_dump())
@@ -173,7 +173,7 @@ def cyber_origin(payload: CyberOriginInput):
 class CORSInput(BaseModel):
     rules: list
 
-@router.post("/organ/cyber/cors")
+@router.post("/cyber/cors")
 def cyber_cors(payload: CORSInput):
     organ = CORSOrgan()
     return organ.process(payload.model_dump())
@@ -184,7 +184,7 @@ def cyber_cors(payload: CORSInput):
 class XSSInput(BaseModel):
     sinks: list
 
-@router.post("/organ/cyber/xss")
+@router.post("/cyber/xss")
 def cyber_xss(payload: XSSInput):
     organ = XSSOrgan()
-    return organ.process(payload.model_dump())S
+    return organ.process(payload.model_dump())

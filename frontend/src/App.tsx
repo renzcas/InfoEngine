@@ -17,7 +17,9 @@ import CausalSetSpikePanel from "./panels/CausalSetSpikePanel";
 import CausalSetSyntheticPanel from "./panels/CausalSetSyntheticPanel";
 import HashPanel from "./panels/HashPanel";
 
-// Physics placeholders (replace later)
+// Physics
+import PowerSpectrumPanel from "./panels/PowerSpectrumPanel";
+
 const LaplacePanel = () => <div>Laplace Panel</div>;
 const KoopmanPanel = () => <div>Koopman Panel</div>;
 const ZetaPanel = () => <div>Zeta-Gamma Panel</div>;
@@ -34,21 +36,20 @@ export default function App() {
     return () => clearTimeout(t);
   }, [panel]);
 
-  // Keyboard shortcuts for quick switching
+  // Keyboard shortcuts
   useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      // Command Palette (Ctrl+K)
+    const handler = (e) => {
       if (e.ctrlKey && e.key.toLowerCase() === "k") {
         e.preventDefault();
         setPaletteOpen(true);
       }
 
-      // Quick panel switching
       if (e.key === "1") setPanel("bh_red");
       if (e.key === "2") setPanel("bh_blue");
       if (e.key === "3") setPanel("origin");
       if (e.key === "4") setPanel("cors");
       if (e.key === "5") setPanel("xss");
+      if (e.key === "6") setPanel("power"); // NEW
     };
 
     window.addEventListener("keydown", handler);
@@ -59,14 +60,12 @@ export default function App() {
     <div className="app-container">
       <Sidebar setPanel={setPanel} />
 
-      {/* Command Palette Overlay */}
       <CommandPalette
         open={paletteOpen}
         setOpen={setPaletteOpen}
         setPanel={setPanel}
       />
 
-      {/* Main Panel Area */}
       <div className={`panel-container ${fade ? "fade-in" : "fade-out"}`}>
         {/* Cybersecurity */}
         {panel === "bh_red" && <BloodHoundRedPanel />}
@@ -82,6 +81,7 @@ export default function App() {
         {panel === "hash" && <HashPanel />}
 
         {/* Physics */}
+        {panel === "power" && <PowerSpectrumPanel />}
         {panel === "laplace" && <LaplacePanel />}
         {panel === "koopman" && <KoopmanPanel />}
         {panel === "zeta" && <ZetaPanel />}

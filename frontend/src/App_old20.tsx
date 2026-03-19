@@ -2,9 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Sidebar } from "./components/Sidebar";
 import { CommandPalette } from "./components/CommandPalette";
 
-// Cybersecurity panels (all removed — folder deleted)
-// import { CORSPanel } from "./panels/Cybersecurity/CORSPanel";
-// import { XSSPanel } from "./panels/Cybersecurity/XSSPanel";
+// Cybersecurity panels
+#import { BloodHoundRedPanel } from "./panels/Cybersecurity/BloodHoundRedPanel";
+#import { BloodHoundBluePanel } from "./panels/Cybersecurity/BloodHoundBluePanel";
+#import { CyberOriginPanel } from "./panels/Cybersecurity/CyberOriginPanel";
+import { CORSPanel } from "./panels/Cybersecurity/CORSPanel";
+import { XSSPanel } from "./panels/Cybersecurity/XSSPanel";
 
 // NEW — Spiral Panel
 import { BloodhoundSpiralPanel } from "./panels/BloodhoundSpiralPanel";
@@ -17,13 +20,12 @@ import HashPanel from "./panels/HashPanel";
 // Physics
 import PowerSpectrumPanel from "./panels/PowerSpectrumPanel";
 
-// Placeholder physics panels
 const LaplacePanel = () => <div>Laplace Panel</div>;
 const KoopmanPanel = () => <div>Koopman Panel</div>;
 const ZetaPanel = () => <div>Zeta-Gamma Panel</div>;
 
 export default function App() {
-  const [panel, setPanel] = useState("bh_spiral");
+  const [panel, setPanel] = useState("bh_red");
   const [fade, setFade] = useState(true);
   const [paletteOpen, setPaletteOpen] = useState(false);
 
@@ -42,8 +44,12 @@ export default function App() {
         setPaletteOpen(true);
       }
 
-      // Removed: bh_red, bh_blue, origin, cors, xss (files deleted)
-      if (e.key === "6") setPanel("power");
+      if (e.key === "1") setPanel("bh_red");
+      if (e.key === "2") setPanel("bh_blue");
+      if (e.key === "3") setPanel("origin");
+      if (e.key === "4") setPanel("cors");
+      if (e.key === "5") setPanel("xss");
+      if (e.key === "6") setPanel("power"); // NEW
     };
 
     window.addEventListener("keydown", handler);
@@ -61,8 +67,13 @@ export default function App() {
       />
 
       <div className={`panel-container ${fade ? "fade-in" : "fade-out"}`}>
-        {/* Cybersecurity — all removed */}
+        {/* Cybersecurity */}
+        {panel === "bh_red" && <BloodHoundRedPanel />}
+        {panel === "bh_blue" && <BloodHoundBluePanel />}
         {panel === "bh_spiral" && <BloodhoundSpiralPanel />}
+        {panel === "origin" && <CyberOriginPanel />}
+        {panel === "cors" && <CORSPanel />}
+        {panel === "xss" && <XSSPanel />}
 
         {/* Computation */}
         {panel === "spike" && <CausalSetSpikePanel />}

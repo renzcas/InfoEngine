@@ -1,0 +1,33 @@
+import { useState } from "react";
+
+export default function IdealsPlaygroundPanel() {
+  const [n, setN] = useState(12);
+  const [result, setResult] = useState(null);
+
+  async function compute() {
+    const res = await fetch("http://localhost:5000/algebra/ideals", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ n })
+    });
+    setResult(await res.json());
+  }
+
+  return (
+    <div>
+      <h2>Ideals & Resonance Playground</h2>
+
+      <input
+        type="number"
+        value={n}
+        onChange={e => setN(Number(e.target.value))}
+      />
+
+      <button onClick={compute}>Compute Ideals</button>
+
+      {result && (
+        <pre>{JSON.stringify(result, null, 2)}</pre>
+      )}
+    </div>
+  );
+}

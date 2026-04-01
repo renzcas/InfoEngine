@@ -1,0 +1,23 @@
+{
+    "episode_id": "tcp_handshake_0001",
+    "scenario": "tcp_handshake_basic",
+    "pcap_path": "data/pcap/tcp_handshake_0001.pcap",
+    "params": {
+        "src_ip": "10.0.0.1",
+        "dst_ip": "10.0.0.2",
+        "src_port": 40000,
+        "dst_port": 80
+    },
+    "version": "v0.1.0"
+}
+
+////////////Turn em intop scapy_engine.py////////////////minimal scapy handshake generator
+
+if __name__ == "__main__":
+    episode = generate_tcp_handshake_scenario(
+        src_ip="10.0.0.1",
+        dst_ip="10.0.0.2",
+        src_port=40000,
+        dst_port=80,
+    )
+    print(episode)

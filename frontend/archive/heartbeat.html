@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Organism Pulse</title>
+  <style>
+    body { background:#050510; color:#e5e5ff; font-family:system-ui; }
+    .pulse { font-size:3rem; margin-top:2rem; }
+    .meta { margin-top:1rem; opacity:0.7; }
+    .dot {
+      width:16px; height:16px; border-radius:50%;
+      background:#ff3366; display:inline-block;
+      box-shadow:0 0 12px #ff3366;
+      transition:transform 0.1s ease-out, opacity 0.1s ease-out;
+    }
+  </style>
+</head>
+<body>
+  <h1>InfoEngine Pulse</h1>
+  <div class="pulse">
+    <span class="dot" id="dot"></span>
+    <span id="tick">tick: –</span>
+  </div>
+  <div class="meta">
+    <div id="event">event: –</div>
+    <div id="time">timestamp: –</div>
+  </div>
+
+  <script>
+    const tickEl = document.getElementById('tick');
+    const eventEl = document.getElementById('event');
+    const timeEl = document.getElementById('time');
+    const dotEl = document.getElementById('dot');
+
+    // Adjust URL if running via Codespaces / tunnel
+    const ws = new WebSocket('ws://localhost:8000/api/cockpit/live/heartbeat');
+
+    ws.onmessage = (msg) => {
+      const data = JSON.parse(msg.data);
+
+      tickEl.textContent = `tick: ${data.ticks}`;
+      eventEl.textContent = `event: ${data.last_event}`;
+      timeEl.textContent = `timestamp: ${data.last_timestamp}`;
+
+      dotEl.style.transform = 'scale(1.4)';
+      dotEl.style.opacity = '1';
+      setTimeout(() => {
+        dotEl.style.transform = 'scale(1.0)';
+        dotEl.style.opacity = '0.6';
+      }, 80);
+    };
+
+    ws.onopen = () => console.log('pulse stream connected');
+    ws.onclose = () => console.log('pulse stream closed');
+  </script>
+</body>
+</html>

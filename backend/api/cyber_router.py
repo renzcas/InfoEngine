@@ -1,62 +1,72 @@
 from fastapi import APIRouter
 
-from infoengine.organs.cyber.bloodhound_red_organ import BloodhoundRedOrgan
-from infoengine.organs.cyber.bloodhound_blue_organ import BloodhoundBlueOrgan
-from infoengine.organs.cyber.cors_organ import CORSOrgan
-from infoengine.organs.cyber.cyber_origin_organ import CyberOriginOrgan
-from infoengine.organs.cyber.cyber_origin_organ_old import CyberOriginOrganOld
-from infoengine.organs.cyber.packet_analysis.service import PacketService
-from infoengine.organs.cyber.remote_ops.service import RemoteOpsService
+# Experiment Lab
 from backend.organs.hacker_python_course.experiment_lab import run_experiment
 
+# Drift + Agent + Health
+from infoengine.organs.cyber.drift_engine import DriftEngine
+from infoengine.organs.cyber.agent_loop_engine import AgentLoopEngine
+from infoengine.organs.cyber.organ_health_engine import OrganHealthEngine
+from infoengine.organs.cyber.organ_registry import REGISTRY
 
-
+# Bloodhound Drift Adapter
+from infoengine.organs.cyber.bloodhound_drift_adapter import BloodhoundDriftAdapter
+from infoengine.organs.cyber.bloodhound_graph import BloodhoundGraph
 
 router = APIRouter()
 
-red = BloodhoundRedOrgan()
-blue = BloodhoundBlueOrgan()
-cors = CORSOrgan()
-origin = CyberOriginOrgan()
-origin_old = CyberOriginOrganOld()
-packet_service = PacketService()
-remote_ops = RemoteOpsService()
-
-
-@router.get("/red/paths")
-def red_paths():
-    return red.generate_attack_paths()
-
-
-@router.get("/blue/defense")
-def blue_defense():
-    return blue.recommend_defenses()
-
-
-@router.get("/cors")
-def cors_info():
-    return cors.check()
-
-
-@router.get("/origin")
-def origin_info():
-    return origin.describe()
-
-
-@router.get("/origin/old")
-def origin_old_info():
-    return origin_old.describe()
-
-
-@router.get("/packet/summary")
-def packet_summary():
-    return packet_service.summary()
-
-
-@router.get("/remote/ops")
-def remote_ops_status():
-    return remote_ops.status()
-
+# ---------------------------------------------------------
+# Experiment Lab
+# ---------------------------------------------------------
 @router.post("/lab/run")
 def lab_run(payload: dict):
     return run_experiment(payload)
+
+# ---------------------------------------------------------
+# Drift Engine
+# ---------------------------------------------------------
+drift_engine = DriftEngine()
+
+@router.get("/drift/timeline")
+def drift_timeline():
+    return {"timeline": drift_engine.get_timeline()}
+
+@router.post("/drift/compute")
+def drift_compute(payload: dict):
+    return drift_engine.compute_drift(payload.get("t1"), payload.get("t2"))
+
+# ---------------------------------------------------------
+# Agent Loop
+# ---------------------------------------------------------
+agent_engine = AgentLoopEngine()
+
+@router.post("/agent/start")
+def agent_start(payload: dict):
+    return agent_engine.start(payload.get("start"))
+
+@router.post("/agent/step")
+def agent_step():
+    return agent_engine.step([])
+
+@router.post("/agent/run")
+def agent_run(payload: dict):
+    return agent_engine.run_loop({}, payload.get("steps", 10))
+
+# ---------------------------------------------------------
+# Organ Health Dashboard
+# ---------------------------------------------------------
+health_engine = OrganHealthEngine(REGISTRY)
+
+@router.get("/health/organs")
+def organ_health():
+    return health_engine.get_health()
+
+# ---------------------------------------------------------
+# Bloodhound Drift Overlay
+# ---------------------------------------------------------
+bh_graph = BloodhoundGraph()
+bh_drift = BloodhoundDriftAdapter(bh_graph)
+
+@router.get("/bloodhound/snapshot")
+def bh_snapshot():
+    return bh_drift.snapshot()

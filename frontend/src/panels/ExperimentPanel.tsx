@@ -20,6 +20,7 @@ export default function ExperimentPanel() {
     <div style={{ padding: "20px" }}>
       <h2>Experiment Lab</h2>
 
+      {/* Preset Buttons */}
       <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
         <button onClick={() => setInput('{ "test": "graph" }')}>Graph</button>
         <button onClick={() => setInput('{ "test": "red" }')}>Red</button>
@@ -27,6 +28,7 @@ export default function ExperimentPanel() {
         <button onClick={() => setInput('{ "test": "overlay" }')}>Overlay</button>
       </div>
 
+      {/* JSON Input */}
       <textarea
         value={input}
         onChange={(e) => setInput(e.target.value)}
@@ -38,8 +40,17 @@ export default function ExperimentPanel() {
         Run Experiment
       </button>
 
+      {/* Raw Output */}
       {output && (
-        <pre style={{ marginTop: "20px", background: "#111", color: "#0f0", padding: "10px" }}>
+        <pre
+          style={{
+            marginTop: "20px",
+            background: "#111",
+            color: "#0f0",
+            padding: "10px",
+            overflowX: "auto",
+          }}
+        >
           {JSON.stringify(output, null, 2)}
         </pre>
       )}
@@ -49,7 +60,10 @@ export default function ExperimentPanel() {
         <ForceGraph2D
           graphData={{
             nodes: output.graph_nodes.map((n) => ({ id: n })),
-            links: output.graph_edges.map(([s, t]) => ({ source: s, target: t })),
+            links: output.graph_edges.map(([s, t]) => ({
+              source: s,
+              target: t,
+            })),
           }}
           width={800}
           height={500}
@@ -68,6 +82,7 @@ export default function ExperimentPanel() {
             ].map((n) => ({ id: n })),
 
             links: [
+              // Red attack edges
               ...output.overlay.red_paths.flatMap((p) =>
                 p.path.slice(0, -1).map((s, i) => ({
                   source: s,
@@ -75,6 +90,8 @@ export default function ExperimentPanel() {
                   color: "red",
                 }))
               ),
+
+              // Blue defense edges
               ...output.overlay.blue_defense.flatMap((d) =>
                 (d.nodes || []).slice(0, -1).map((s, i) => ({
                   source: s,

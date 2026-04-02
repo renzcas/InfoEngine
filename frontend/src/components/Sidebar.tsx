@@ -1,98 +1,40 @@
-import React, { useState } from "react";
-import { FaShieldAlt, FaBrain, FaCogs, FaChevronDown, FaChevronRight } from "react-icons/fa";
+import React from "react";
 
-export const Sidebar = ({ setPanel }) => {
-  const [open, setOpen] = useState({
-    cyber: true,
-    computation: true,
-    physics: true
-  });
-
-  const section = (label, icon, key) => (
-    <div
-      onClick={() => setOpen({ ...open, [key]: !open[key] })}
-      style={{
-        display: "flex",
-        alignItems: "center",
-        cursor: "pointer",
-        marginTop: "1rem",
-        color: "#bbb",
-        fontWeight: "bold",
-        userSelect: "none"
-      }}
-    >
-      {open[key] ? <FaChevronDown /> : <FaChevronRight />}
-      <span style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}>{icon}</span>
-      {label}
-    </div>
-  );
-
-  const button = (label, panel) => (
-    <button
-      onClick={() => setPanel(panel)}
-      style={{
-        width: "100%",
-        padding: "0.4rem 0.75rem",
-        marginTop: "0.25rem",
-        background: "transparent",
-        border: "1px solid #333",
-        color: "#eee",
-        textAlign: "left",
-        cursor: "pointer",
-        borderRadius: "4px",
-        transition: "0.2s",
-      }}
-      onMouseEnter={(e) => (e.currentTarget.style.background = "#1a1a1a")}
-      onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-    >
-      {label}
-    </button>
-  );
-
+export function Sidebar({ setPanel }) {
   return (
-    <div
-      style={{
-        width: "260px",
-        background: "rgba(10,10,10,0.85)",
-        backdropFilter: "blur(8px)",
-        color: "#eee",
-        padding: "1rem",
-        borderRight: "1px solid #333",
-        height: "100vh",
-        overflowY: "auto",
-      }}
-    >
-      {/* Cybersecurity */}
-      {section("Cybersecurity", <FaShieldAlt />, "cyber")}
-      {open.cyber && (
-        <>
-          {button("BloodHound Red", "bh_red")}
-          {button("BloodHound Blue", "bh_blue")}
-          {button("Cyber Origin", "origin")}
-          {button("CORS Analyzer", "cors")}
-          {button("XSS Analyzer", "xss")}
-        </>
-      )}
+    <div className="sidebar">
+      <h2 className="sidebar-title">InfoEngine</h2>
+
+      {/* Spiral */}
+      <button onClick={() => setPanel("bh_spiral")}>
+        Bloodhound Spiral
+      </button>
 
       {/* Computation */}
-      {section("Computation", <FaCogs />, "computation")}
-      {open.computation && (
-        <>
-          {button("Hash Organ", "hash")}
-          {button("Spike Panel", "spike")}
-          {button("Synthetic Causal Graph", "synthetic")}
-        </>
-      )}
+      <h3 className="sidebar-section">Computation</h3>
+      <button onClick={() => setPanel("spike")}>Causal Spike</button>
+      <button onClick={() => setPanel("synthetic")}>Synthetic Causal Set</button>
+      <button onClick={() => setPanel("hash")}>Hash Panel</button>
 
       {/* Physics */}
-      {section("Physics", <FaBrain />, "physics")}
-      {open.physics && (
-        <>
-          {button("Laplace", "laplace")}
-          {button("Koopman", "koopman")}
-          {button("Zeta-Gamma", "zeta")}
-        </>
-      )}
+      <h3 className="sidebar-section">Physics</h3>
+      <button onClick={() => setPanel("power")}>Power Spectrum</button>
+      <button onClick={() => setPanel("laplace")}>Laplace</button>
+      <button onClick={() => setPanel("koopman")}>Koopman</button>
+      <button onClick={() => setPanel("zeta")}>Zeta-Gamma</button>
+
+      {/* Labs */}
+      <h3 className="sidebar-section">Labs</h3>
+      <button onClick={() => setPanel("experiment")}>
+        Experiment Lab
+      </button>
+
+      {/* Analysis */}
+      <h3 className="sidebar-section">Analysis</h3>
+      <button onClick={() => setPanel("drift_timeline")}>Drift Timeline</button>
+      <button onClick={() => setPanel("agent_loop")}>Agent Loop</button>
+      <button onClick={() => setPanel("organ_health")}>Organ Health</button>
+      <button onClick={() => setPanel("bh_drift_overlay")}>BH Drift Overlay</button>
     </div>
   );
-};
+}

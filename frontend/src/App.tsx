@@ -2,22 +2,23 @@ import React, { useState, useEffect } from "react";
 import { Sidebar } from "./components/Sidebar";
 import { CommandPalette } from "./components/CommandPalette";
 
-// Cybersecurity panels (all removed — folder deleted)
-// import { CORSPanel } from "./panels/Cybersecurity/CORSPanel";
-// import { XSSPanel } from "./panels/Cybersecurity/XSSPanel";
-
-// NEW — Spiral Panel
+// Core Panels
 import { BloodhoundSpiralPanel } from "./panels/BloodhoundSpiralPanel";
-
-// Computation
 import CausalSetSpikePanel from "./panels/CausalSetSpikePanel";
 import CausalSetSyntheticPanel from "./panels/CausalSetSyntheticPanel";
 import HashPanel from "./panels/HashPanel";
-
-// Physics
 import PowerSpectrumPanel from "./panels/PowerSpectrumPanel";
 
-// Placeholder physics panels
+// Experiment Lab
+import ExperimentPanel from "./panels/ExperimentPanel";
+
+// New Analysis Panels
+import DriftTimelinePanel from "./panels/DriftTimelinePanel";
+import AgentLoopPanel from "./panels/AgentLoopPanel";
+import OrganHealthPanel from "./panels/OrganHealthPanel";
+import BloodhoundDriftOverlayPanel from "./panels/BloodhoundDriftOverlayPanel";
+
+// Placeholder physics
 const LaplacePanel = () => <div>Laplace Panel</div>;
 const KoopmanPanel = () => <div>Koopman Panel</div>;
 const ZetaPanel = () => <div>Zeta-Gamma Panel</div>;
@@ -27,22 +28,18 @@ export default function App() {
   const [fade, setFade] = useState(true);
   const [paletteOpen, setPaletteOpen] = useState(false);
 
-  // Smooth fade animation on panel change
   useEffect(() => {
     setFade(false);
     const t = setTimeout(() => setFade(true), 150);
     return () => clearTimeout(t);
   }, [panel]);
 
-  // Keyboard shortcuts
   useEffect(() => {
     const handler = (e) => {
       if (e.ctrlKey && e.key.toLowerCase() === "k") {
         e.preventDefault();
         setPaletteOpen(true);
       }
-
-      // Removed: bh_red, bh_blue, origin, cors, xss (files deleted)
       if (e.key === "6") setPanel("power");
     };
 
@@ -61,10 +58,8 @@ export default function App() {
       />
 
       <div className={`panel-container ${fade ? "fade-in" : "fade-out"}`}>
-        {/* Cybersecurity — all removed */}
+        {/* Core */}
         {panel === "bh_spiral" && <BloodhoundSpiralPanel />}
-
-        {/* Computation */}
         {panel === "spike" && <CausalSetSpikePanel />}
         {panel === "synthetic" && <CausalSetSyntheticPanel />}
         {panel === "hash" && <HashPanel />}
@@ -74,6 +69,15 @@ export default function App() {
         {panel === "laplace" && <LaplacePanel />}
         {panel === "koopman" && <KoopmanPanel />}
         {panel === "zeta" && <ZetaPanel />}
+
+        {/* Experiment Lab */}
+        {panel === "experiment" && <ExperimentPanel />}
+
+        {/* Analysis */}
+        {panel === "drift_timeline" && <DriftTimelinePanel />}
+        {panel === "agent_loop" && <AgentLoopPanel />}
+        {panel === "organ_health" && <OrganHealthPanel />}
+        {panel === "bh_drift_overlay" && <BloodhoundDriftOverlayPanel />}
       </div>
     </div>
   );

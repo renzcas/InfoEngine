@@ -7,6 +7,7 @@ from infoengine.organs.cyber.cyber_origin_organ import CyberOriginOrgan
 from infoengine.organs.cyber.cyber_origin_organ_old import CyberOriginOrganOld
 from infoengine.organs.cyber.packet_analysis.service import PacketService
 from infoengine.organs.cyber.remote_ops.service import RemoteOpsService
+from backend.organs.hacker_python_course.experiment_lab import run_experiment
 
 router = APIRouter()
 
@@ -52,3 +53,8 @@ def packet_summary():
 @router.get("/remote/ops")
 def remote_ops_status():
     return remote_ops.status()
+
+@router.post("/lab/run")
+def lab_run(payload: dict):
+    return run_experiment(payload)
+

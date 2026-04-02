@@ -1,36 +1,18 @@
 """
-Experiment Lab — Your permanent safe sandbox.
-
-Use this file to run experiments on:
-- graphs
-- privilege drift
-- BloodhoundRed/Blue
-- agent loops
-- math
-- InfoPhyzx ideas
-- anything you want to test
-
-This file NEVER gets deleted or rewritten.
+Experiment Lab — Safe sandbox for InfoEngine experiments.
 """
 
 from typing import Dict, Any
 
 def run_experiment(payload: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Entry point for all experiments.
-    Modify inside this function ONLY.
-    Everything else in InfoEngine stays untouched.
-    """
-
-    # Example: echo back payload
     result = {
         "received": payload,
-        "message": "Experiment executed safely.",
+        "message": "Experiment executed safely."
     }
 
-    # You can add your experiments here:
-    # ---------------------------------
-    # Example: simple graph test
+    # -----------------------------
+    # Graph Test
+    # -----------------------------
     if payload.get("test") == "graph":
         import networkx as nx
         G = nx.DiGraph()
@@ -39,20 +21,38 @@ def run_experiment(payload: Dict[str, Any]) -> Dict[str, Any]:
         result["graph_nodes"] = list(G.nodes())
         result["graph_edges"] = list(G.edges())
 
-    # Example: privilege drift test
-    if payload.get("test") == "drift":
-        result["drift"] = "Drift simulation placeholder"
-
-    # Example: BloodhoundRed test
+    # -----------------------------
+    # Red Organ Test
+    # -----------------------------
     if payload.get("test") == "red":
         from infoengine.organs.cyber.bloodhound_red_organ import BloodhoundRedOrgan
         red = BloodhoundRedOrgan()
         result["red_paths"] = red.generate_attack_paths()
 
-    # Example: BloodhoundBlue test
+    # -----------------------------
+    # Blue Organ Test
+    # -----------------------------
     if payload.get("test") == "blue":
         from infoengine.organs.cyber.bloodhound_blue_organ import BloodhoundBlueOrgan
         blue = BloodhoundBlueOrgan()
         result["blue_defense"] = blue.recommend_defenses()
+
+    # -----------------------------
+    # Red + Blue Overlay
+    # -----------------------------
+    if payload.get("test") == "overlay":
+        from infoengine.organs.cyber.bloodhound_red_organ import BloodhoundRedOrgan
+        from infoengine.organs.cyber.bloodhound_blue_organ import BloodhoundBlueOrgan
+
+        red = BloodhoundRedOrgan()
+        blue = BloodhoundBlueOrgan()
+
+        red_paths = red.generate_attack_paths()
+        blue_def = blue.recommend_defenses()
+
+        result["overlay"] = {
+            "red_paths": red_paths.get("attack_paths", []),
+            "blue_defense": blue_def.get("defenses", []),
+        }
 
     return result

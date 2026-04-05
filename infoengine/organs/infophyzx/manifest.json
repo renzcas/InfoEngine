@@ -1,0 +1,10 @@
+{
+  "name": "InfoPhyzx",
+  "slug": "infophyzx",
+  "version": "0.1.0",
+  "description": "Info-physics propagation and field simulation organ.",
+  "endpoints": [
+    "/infophyzx/field/init",
+    "/infophyzx/field/step"
+  ]
+}
